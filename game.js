@@ -2,6 +2,7 @@ var buttonColours = ["red", "blue", "green", "yellow"];
 var gamePattern = [];
 var level = 0;
 var place = 0;
+var start = true;
 
 $('.btn').click(function () {
     var id = $(this).attr('id');
@@ -10,9 +11,13 @@ $('.btn').click(function () {
     animatePress(id);
 });
 
-$(document).keypress(function () {
-    nextSequence();
-    $('#level-title').text('Level ' + level);
+$(document).keypress(function (event) {
+    console.log(event.key);
+    if (start){
+        nextSequence();
+        $('#level-title').text('Level ' + level);
+        start = !start;
+    }
 });
 
 function nextSequence() {
@@ -23,7 +28,6 @@ function nextSequence() {
     gamePattern.push(randomChosenColour);
     level++;
     $('#level-title').text('Level ' + level);
-    console.log(gamePattern);
 }
 
 function playSound(name) {
@@ -50,7 +54,7 @@ function checkAnswer(currentLevel) {
         $('#level-title').text('Game Over, Press Any Key to Replace');
         startOver();
     }
-    if (place === level) {
+    if (place === level && !start) {
         place = 0;
         setTimeout(() => {
             nextSequence();
@@ -62,5 +66,6 @@ function startOver() {
     level = 0;
     gamePattern = [];
     place = 0;
+    start = true;
 }
 
